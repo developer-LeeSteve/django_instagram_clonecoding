@@ -108,7 +108,10 @@ VENV_ROOT = os.path.dirname(BASE_DIR)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS =  [BASE_DIR / 'static']
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATIC_ROOT = os.path.join(VENV_ROOT, 'static_root')
 
 MEDIA_URL = '/media/'
-MEDIAU_URL = os.path.join(BASE_DIR, 'uploaded_media')
+MEDIA_ROOT = os.path.join(VENV_ROOT, 'uploaded_media')
+
+# AUTH_MODELS
+AUTH_USER_MODEL = 'accounts.CustomUser'
