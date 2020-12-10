@@ -37,7 +37,7 @@ class CustomUserManager(BaseUserManager):
 		return user
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
 	objects = CustomUserManager()
 
 	date_joined = models.DateTimeField(verbose_name="가입일",default=timezone.now, null=True)
@@ -52,10 +52,52 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 	username = models.CharField(verbose_name="닉네임", max_length=50, unique=True)
 	date_of_birth = models.DateField(verbose_name="생년월일", max_length=8)
 	profile_pic = models.ImageField(verbose_name="프로파일 사진", default="default_profile.png")
-	
 
 	USERNAME_FIELD='email'
 	REQUIRED_FIELDS=['password', 'name', 'username', 'date_of_birth']
+
+	# Relationships
+	followers = models.ManyToManyField(
+		'self',
+		symmetrical=False,
+		through='Relationship',
+		related_name='followees',
+		through_fields=('to_user', 'from_user')
+		)
+
+	@property
+	def followers(self):
+		follower_relationship = self.relationship_to_user.filter(relationship_type=Relationship.RELATIONSHIP_TYPE_FOLLOWING)
+		follower_list = follower_relationship.values_list('from_user', flat=True)
+		followers = User.objects.filter(pk__in=follower_list)
+		return followers
+
+	@property
+	def followees(self):
+		followee_relationship = self.relationship_from_user.filter(relationship_type=Relationship.RELATIONSHIP_TYPE_FOLLOWING)
+		followee_list = followee_relationship.values_list('to_user', flat=True)
+		followees = User.objects.filter(pk__in=followee_list)
+		return followees
+
+	@property
+	def blocked(self):
+		blocked_relationship = self.relationship_from_user.filter(relationship_type=Relationship.RELATIONSHIP_TYPE_BLOCKED)
+		blocked_list = blocked_relationship.values_list('to_user', flat=True)
+		blocked = User.objects.filter(pk__in=blocked_list)
+		return blocked
+		
+	
+	def follow(self, to_user):
+		self.relationship_from_user.create(
+			to_user = to_user,
+			relationship_type='f'
+			)
+	
+	def block(self, to_user):
+		self.relationship_from_user.create(
+			to_user=to_user,
+			relationship_type='b'
+			)
 
 	def __str__(self):
 		return self.email
@@ -64,3 +106,26 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 		db_table = "사용자 목록"
 		verbose_name="사용자"
 		verbose_name_plural="사용자"
+
+
+class Relationship(models.Model):
+    RELATIONSHIP_TYPE_FOLLOWING = 'f'
+    RELATIONSHIP_TYPE_BLOCKED = 'b'
+    CHOICE_TYPE = (
+    	(RELATIONSHIP_TYPE_FOLLOWING, '팔로잉'),
+    	(RELATIONSHIP_TYPE_BLOCKED, '차단'),
+    	)
+    from_user = models.ForeignKey(
+    	User,
+    	related_name='relationship_from_user',
+    	on_delete=models.CASCADE,
+    	)
+    to_user = models.ForeignKey(
+    	User,
+    	related_name='relationship_to_user',
+    	on_delete=models.CASCADE,
+    	)
+    relationship_type=models.CharField(max_length=1, choices=CHOICE_TYPE)
+
+    def __str__(self):
+    	return f"{self.from_user} follows {self.to_user}, type={self.relationship_type}"

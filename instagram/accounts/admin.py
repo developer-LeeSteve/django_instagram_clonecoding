@@ -1,20 +1,22 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from accounts.models import CustomUser
+from accounts.models import User
 
 class CustomUserAdmin(UserAdmin):
 	list_display = ('email', 'username', 'name', 'date_joined', 'is_staff', 'is_active')
 	search_fields = ()
 	fieldsets=(
 		(None, {'fields': ('email', 'password')}),
-		('Personal Info', {'fields': ('username', 'name', 'date_of_birth', 'profile_pic')}),
+		('Personal Info', {'fields': ('username', 'name', 'date_of_birth', 'profile_pic',)}),
 		('Permissions', {'fields': ('is_admin',)}),
 	)
 	add_fieldsets=(
 		(None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2'),
+            'fields': ('email', 'name', 'username', 'password1', 'password2', 'date_of_birth', 'profile_pic'),
         }),
 	)
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, CustomUserAdmin)
+admin.site.site_header = 'Django Admin Page'
+admin.site.index_title = 'Django Admin'
