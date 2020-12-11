@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.core.exceptions import ValidationError
 
 class CustomUserManager(BaseUserManager):
 	def create_user(self, email, password, name, username, date_of_birth, **kwargs):
@@ -56,45 +57,63 @@ class User(AbstractBaseUser, PermissionsMixin):
 	USERNAME_FIELD='email'
 	REQUIRED_FIELDS=['password', 'name', 'username', 'date_of_birth']
 
-	# Relationships
-	followers = models.ManyToManyField(
+	# Follower / Followees Relationships
+	follower_class = models.ManyToManyField(
 		'self',
 		symmetrical=False,
-		through='Relationship',
-		related_name='followees',
-		through_fields=('to_user', 'from_user')
+		through='FollowingRelationships',
+		related_name='followee_class',
+		through_fields=('to_user', 'from_user'),
+		)
+
+	# Blocked Relationships
+	blocked_by_class = models.ManyToManyField(
+		'self',
+		symmetrical=False,
+		through='BlockedRelationships',
+		related_name='blocked_class',
+		through_fields=('to_user', 'from_user'),
 		)
 
 	@property
 	def followers(self):
-		follower_relationship = self.relationship_to_user.filter(relationship_type=Relationship.RELATIONSHIP_TYPE_FOLLOWING)
+		follower_relationship = self.following_relationship_to_user.filter(relationship_type=FollowingRelationships.RELATIONSHIP_TYPE_FOLLOWING)
 		follower_list = follower_relationship.values_list('from_user', flat=True)
 		followers = User.objects.filter(pk__in=follower_list)
 		return followers
 
 	@property
 	def followees(self):
-		followee_relationship = self.relationship_from_user.filter(relationship_type=Relationship.RELATIONSHIP_TYPE_FOLLOWING)
+		followee_relationship = self.following_relationship_from_user.filter(relationship_type=FollowingRelationships.RELATIONSHIP_TYPE_FOLLOWING)
 		followee_list = followee_relationship.values_list('to_user', flat=True)
 		followees = User.objects.filter(pk__in=followee_list)
 		return followees
 
 	@property
 	def blocked(self):
-		blocked_relationship = self.relationship_from_user.filter(relationship_type=Relationship.RELATIONSHIP_TYPE_BLOCKED)
+		blocked_relationship = self.blocked_relationship_from_user.filter(relationship_type=BlockedRelationships.RELATIONSHIP_TYPE_BLOCKED)
 		blocked_list = blocked_relationship.values_list('to_user', flat=True)
 		blocked = User.objects.filter(pk__in=blocked_list)
 		return blocked
 		
 	
 	def follow(self, to_user):
-		self.relationship_from_user.create(
+		if self == to_user:
+			raise ValidationError("You cannot follow yourself")
+		if to_user in self.followees:
+			raise ValidationError("You are already follwing this user")
+		self.following_relationship_from_user.create(
 			to_user = to_user,
 			relationship_type='f'
 			)
 	
 	def block(self, to_user):
-		self.relationship_from_user.create(
+		if self == to_user:
+			raise ValidationError("You cannot block yourself")
+		if to_user in self.blocked:
+			raise ValidationError("You've already blocked this user")
+		self.followee_class.remove(to_user)
+		self.blocked_relationship_from_user.create(
 			to_user=to_user,
 			relationship_type='b'
 			)
@@ -108,24 +127,45 @@ class User(AbstractBaseUser, PermissionsMixin):
 		verbose_name_plural="사용자"
 
 
-class Relationship(models.Model):
+# Class for Following Relationships
+class FollowingRelationships(models.Model):
     RELATIONSHIP_TYPE_FOLLOWING = 'f'
-    RELATIONSHIP_TYPE_BLOCKED = 'b'
     CHOICE_TYPE = (
     	(RELATIONSHIP_TYPE_FOLLOWING, '팔로잉'),
-    	(RELATIONSHIP_TYPE_BLOCKED, '차단'),
     	)
     from_user = models.ForeignKey(
     	User,
-    	related_name='relationship_from_user',
+    	related_name='following_relationship_from_user',
     	on_delete=models.CASCADE,
     	)
     to_user = models.ForeignKey(
     	User,
-    	related_name='relationship_to_user',
+    	related_name='following_relationship_to_user',
     	on_delete=models.CASCADE,
     	)
     relationship_type=models.CharField(max_length=1, choices=CHOICE_TYPE)
 
     def __str__(self):
     	return f"{self.from_user} follows {self.to_user}, type={self.relationship_type}"
+
+
+# Class for Blocking Relationships
+class BlockedRelationships(models.Model):
+    RELATIONSHIP_TYPE_BLOCKED = 'b'
+    CHOICE_TYPE = (
+    	(RELATIONSHIP_TYPE_BLOCKED, '차단'),
+    	)
+    from_user = models.ForeignKey(
+    	User,
+    	related_name='blocked_relationship_from_user',
+    	on_delete=models.CASCADE,
+    	)
+    to_user = models.ForeignKey(
+    	User,
+    	related_name='blocked_relationship_to_user',
+    	on_delete=models.CASCADE,
+    	)
+    relationship_type=models.CharField(max_length=1, choices=CHOICE_TYPE)
+
+    def __str__(self):
+    	return f"{self.from_user} blocked {self.to_user}, type={self.relationship_type}"
