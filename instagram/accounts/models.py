@@ -48,9 +48,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 	is_superuser = models.BooleanField(default=False)
 
 	email = models.EmailField(verbose_name='이메일', max_length=50, null=False, unique=True)
-	password = models.CharField(verbose_name="비밀번호", max_length=200)
 	name = models.CharField(verbose_name="이름", max_length=50)
 	username = models.CharField(verbose_name="닉네임", max_length=50, unique=True)
+	password = models.CharField(verbose_name="비밀번호", max_length=200)
 	date_of_birth = models.DateField(verbose_name="생년월일", max_length=8)
 	profile_pic = models.ImageField(verbose_name="프로파일 사진", default="default_profile.png")
 
