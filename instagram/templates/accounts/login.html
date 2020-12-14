@@ -1,1 +1,8 @@
-login page
+<form method="POST">
+	{% csrf_token %}
+	{{ form.as_p }}
+	{% for errors in form.email.errors %}
+		{{ errors }}
+	{% endfor %}
+	<input type="submit" value="Login">
+</form>

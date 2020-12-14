@@ -115,3 +115,6 @@ MEDIA_ROOT = os.path.join(VENV_ROOT, 'uploaded_media')
 
 # AUTH_MODELS
 AUTH_USER_MODEL = 'accounts.User'
+
+# URLS
+LOGIN_URL = '/accounts/login/'
