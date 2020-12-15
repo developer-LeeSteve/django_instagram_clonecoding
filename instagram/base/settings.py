@@ -103,18 +103,24 @@ USE_TZ = True
 
 
 # STATIC FILES
-
 VENV_ROOT = os.path.dirname(BASE_DIR)
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS =  [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(VENV_ROOT, 'static_root')
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(VENV_ROOT, 'uploaded_media')
 
-# AUTH_MODELS
-AUTH_USER_MODEL = 'accounts.User'
-
 # URLS
 LOGIN_URL = '/accounts/login/'
+
+# EMAIL SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = config("EMAIL_ID")
+EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
+EMAIL_UST_TLS = True
+EMAIL_PORT = 587
+DEFAULT_FROM_MAIL = config("EMAIL_ID")
+
+# AUTH_MODELS
+AUTH_USER_MODEL = 'accounts.User'

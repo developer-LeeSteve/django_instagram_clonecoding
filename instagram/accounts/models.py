@@ -3,8 +3,10 @@ from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.core.exceptions import ValidationError
 
+from accounts.custom_methods import email_verification_code
+
 class CustomUserManager(BaseUserManager):
-	def create_user(self, email, password, name, username, date_of_birth, **kwargs):
+	def create_user(self, email, password, name, username, date_of_birth, code, **kwargs):
 		if not email:
 			raise ValueError("Users must have an email address")
 		if not password:
@@ -16,6 +18,7 @@ class CustomUserManager(BaseUserManager):
 			name = name,
 			username = username,
 			date_of_birth = date_of_birth,
+			code = code,
 			**kwargs
 		)
 
@@ -23,13 +26,14 @@ class CustomUserManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
-	def create_superuser(self, email, password, name, username, date_of_birth):
+	def create_superuser(self, email, password, name, username, date_of_birth, code=None):
 		user = self.create_user(
 			email = self.normalize_email(email),
 			password = password,
 			name = name,
 			username = username,
 			date_of_birth = date_of_birth,
+			code=None,
 		)
 		user.is_superuser = True
 		user.is_admin = True
@@ -52,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	username = models.CharField(verbose_name="닉네임", max_length=50, unique=True)
 	password = models.CharField(verbose_name="비밀번호", max_length=200)
 	date_of_birth = models.DateField(verbose_name="생년월일", max_length=8)
+	code = models.CharField(verbose_name="인증번호", max_length=6, blank=True, null=True, default=str(email_verification_code()))
 	profile_pic = models.ImageField(verbose_name="프로파일 사진", default="default_profile.png")
 
 	USERNAME_FIELD='email'
@@ -61,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	follower_class = models.ManyToManyField(
 		'self',
 		symmetrical=False,
-		through='FollowingRelationships',
+		through='FollowingRelationship',
 		related_name='followee_class',
 		through_fields=('to_user', 'from_user'),
 		)
@@ -70,28 +75,28 @@ class User(AbstractBaseUser, PermissionsMixin):
 	blocked_by_class = models.ManyToManyField(
 		'self',
 		symmetrical=False,
-		through='BlockedRelationships',
+		through='BlockedRelationship',
 		related_name='blocked_class',
 		through_fields=('to_user', 'from_user'),
 		)
 
 	@property
 	def followers(self):
-		follower_relationship = self.following_relationship_to_user.filter(relationship_type=FollowingRelationships.RELATIONSHIP_TYPE_FOLLOWING)
+		follower_relationship = self.following_relationship_to_user.filter(relationship_type=FollowingRelationship.RELATIONSHIP_TYPE_FOLLOWING)
 		follower_list = follower_relationship.values_list('from_user', flat=True)
 		followers = User.objects.filter(pk__in=follower_list)
 		return followers
 
 	@property
 	def followees(self):
-		followee_relationship = self.following_relationship_from_user.filter(relationship_type=FollowingRelationships.RELATIONSHIP_TYPE_FOLLOWING)
+		followee_relationship = self.following_relationship_from_user.filter(relationship_type=FollowingRelationship.RELATIONSHIP_TYPE_FOLLOWING)
 		followee_list = followee_relationship.values_list('to_user', flat=True)
 		followees = User.objects.filter(pk__in=followee_list)
 		return followees
 
 	@property
 	def blocked(self):
-		blocked_relationship = self.blocked_relationship_from_user.filter(relationship_type=BlockedRelationships.RELATIONSHIP_TYPE_BLOCKED)
+		blocked_relationship = self.blocked_relationship_from_user.filter(relationship_type=BlockedRelationship.RELATIONSHIP_TYPE_BLOCKED)
 		blocked_list = blocked_relationship.values_list('to_user', flat=True)
 		blocked = User.objects.filter(pk__in=blocked_list)
 		return blocked
@@ -128,7 +133,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 # Class for Following Relationships
-class FollowingRelationships(models.Model):
+class FollowingRelationship(models.Model):
     RELATIONSHIP_TYPE_FOLLOWING = 'f'
     CHOICE_TYPE = (
     	(RELATIONSHIP_TYPE_FOLLOWING, '팔로잉'),
@@ -150,7 +155,7 @@ class FollowingRelationships(models.Model):
 
 
 # Class for Blocking Relationships
-class BlockedRelationships(models.Model):
+class BlockedRelationship(models.Model):
     RELATIONSHIP_TYPE_BLOCKED = 'b'
     CHOICE_TYPE = (
     	(RELATIONSHIP_TYPE_BLOCKED, '차단'),
