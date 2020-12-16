@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, FormView
 from django.core.mail import EmailMessage
 from django.contrib.auth import login, authenticate, logout
+from django.template.loader import render_to_string
+# from django.contrib.messages import messages
 
 from accounts.forms import CustomUserCreationForm, CustomLoginForm, EmailVerificationForm
 from accounts.models import *
-from accounts.custom_methods import email_verification_code
-# from accounts.custom_methods import 
+from accounts.custom_methods import email_verification_code, send_mail
+# from accounts.custom_methods import
+
 
 # 회원가입
 class UserRegisterView(CreateView):
@@ -14,14 +17,20 @@ class UserRegisterView(CreateView):
 	form_class = CustomUserCreationForm
 	template_name = 'accounts/register.html'
 
-	# def get_success_url(self):
-	# 	return redirect('accounts:login')
-
 	def form_valid(self, form):
 		self.object = form.save(commit=False)
 		self.object.is_active = False
 		self.object.save()
-		return redirect('accounts:login')
+		send_mail(
+			subject=f'{self.object.code} is your Instagram code',
+			recipient_list=[self.object.email],
+			html=render_to_string('accounts/register_email.html', {
+				'email':self.object.email,
+				'code':self.object.code,
+			})
+		)
+		return redirect('accounts:email_verification_code')
+
 
 # 로그인
 class LoginView(FormView):
@@ -38,6 +47,8 @@ class LoginView(FormView):
 			login(self.request, user)
 		return super().form_valid(form)
 
+
+# 이메일 인증번호 입력
 class EmailVerificationView(FormView):
 	form_class = EmailVerificationForm
 	template_name = 'accounts/email_verification_code.html'
@@ -52,9 +63,14 @@ class EmailVerificationView(FormView):
 			user.save()
 		return super().form_valid(form)
 
+# 로그아웃
 def logoutUser(request):
 	logout(request)
 	return redirect('accounts:login')
 
 def index(request):
 	return render(request, 'accounts/index.html')
+
+#
+def RegisterEmail(request):
+	return render(request, 'accounts/register_email.html')

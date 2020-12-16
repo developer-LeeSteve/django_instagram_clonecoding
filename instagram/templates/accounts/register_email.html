@@ -1,0 +1,8 @@
+{% load static %}
+{% load inlinecss %}
+
+{% inlinecss "css/email.css" %}
+<h1>Hi,</h1>
+<h2>Someone tried to sign up for an Instagram account with {{ email }}. If it was you, enter this confirmation code in the app:</h2>
+<h2>{{ code }}</h2>
+{% endinlinecss %}

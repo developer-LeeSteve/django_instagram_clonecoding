@@ -24,7 +24,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
+
     'posts.apps.PostsConfig',
+
+    'django_inlinecss',
 ]
 
 MIDDLEWARE = [
@@ -118,9 +121,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config("EMAIL_ID")
 EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
-EMAIL_UST_TLS = True
+EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 DEFAULT_FROM_MAIL = config("EMAIL_ID")
-
 # AUTH_MODELS
 AUTH_USER_MODEL = 'accounts.User'
