@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from accounts.models import User, FollowingRelationship, BlockedRelationship
 
 class CustomUserAdmin(UserAdmin):
-	list_display = ('email', 'username', 'name', 'date_joined', 'is_staff', 'is_active')
+	list_display = ('email', 'username', 'name', 'date_joined', 'is_staff', 'is_active', 'id',)
 	search_fields = ()
 	fieldsets=(
 		(None, {'fields': ('email', 'password')}),

@@ -1,5 +1,8 @@
 <form method="POST">
 	{% csrf_token %}
 	{{ form.as_p }}
+	{% for message in messages %}
+		{{message}}
+	{% endfor %}
 	<input type="submit" value="Login">
 </form>

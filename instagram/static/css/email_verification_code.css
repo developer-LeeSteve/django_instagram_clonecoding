@@ -1,0 +1,24 @@
+.insta-icon{
+	display: flex;
+	justify-content: center;
+	margin-top: 3%;
+	margin-bottom: 3%;
+	width:18%;
+	float:right;
+}
+
+.input-form{
+	margin-top: 5%;
+	margin-bottom: 5%;
+	display: flex;
+	justify-content: center;
+}
+
+.insta-text-icon{
+	margin-top: 0.5%;
+	margin-bottom: 0.5%;
+	width:17%;
+	float:left;
+	display: flex;
+	justify-content: center;
+}

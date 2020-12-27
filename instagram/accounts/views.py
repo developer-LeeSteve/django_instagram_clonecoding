@@ -8,10 +8,10 @@ from django.template.loader import render_to_string
 from accounts.forms import CustomUserCreationForm, CustomLoginForm, EmailVerificationForm
 from accounts.models import *
 from accounts.custom_methods import email_verification_code, send_mail
-# from accounts.custom_methods import
+from accounts.decorators import custom_login_required
 
 
-# 회원가입
+# 회원가입 View
 class UserRegisterView(CreateView):
 	model = User
 	form_class = CustomUserCreationForm
@@ -32,7 +32,7 @@ class UserRegisterView(CreateView):
 		return redirect('accounts:email_verification_code')
 
 
-# 로그인
+# 로그인 View
 class LoginView(FormView):
 	form_class = CustomLoginForm
 	template_name = 'accounts/login.html'
@@ -48,7 +48,7 @@ class LoginView(FormView):
 		return super().form_valid(form)
 
 
-# 이메일 인증번호 입력
+# 이메일 인증번호 입력 View
 class EmailVerificationView(FormView):
 	form_class = EmailVerificationForm
 	template_name = 'accounts/email_verification_code.html'
@@ -68,6 +68,7 @@ def logoutUser(request):
 	logout(request)
 	return redirect('accounts:login')
 
+@custom_login_required
 def index(request):
 	return render(request, 'accounts/index.html')
 

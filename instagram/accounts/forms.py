@@ -80,7 +80,7 @@ class EmailVerificationForm(forms.Form):
 		error_messages={'required':'이메일을 입력해주세요.'},
 		label='email')
 	code = forms.CharField(
-		widget=forms.NumberInput(attrs={'class':'form-control'}),
+		widget=forms.TextInput(attrs={'class':'form-control'}),
 		error_messages={'required':'인증번호를 입력해주세요.'},
 		label='code')
 
