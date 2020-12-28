@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, FormView
 from django.core.mail import EmailMessage
@@ -36,7 +37,7 @@ class UserRegisterView(CreateView):
 class LoginView(FormView):
 	form_class = CustomLoginForm
 	template_name = 'accounts/login.html'
-	success_url = '/accounts/index/'
+	success_url = '/'
 
 	def form_valid(self, form):
 		email = form.cleaned_data.get('email')
@@ -70,8 +71,17 @@ def logoutUser(request):
 
 @custom_login_required
 def index(request):
-	return render(request, 'accounts/index.html')
+	return render(request, 'index.html')
 
 #
 def RegisterEmail(request):
 	return render(request, 'accounts/register_email.html')
+
+def inbox(request):
+	return HttpResponse('inbox')
+
+def explore(request):
+	return HttpResponse('explore')
+
+def activity(request):
+	return HttpResponse('activity')

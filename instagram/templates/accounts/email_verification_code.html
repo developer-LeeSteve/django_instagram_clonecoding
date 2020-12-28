@@ -11,11 +11,11 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-3 border-right border-bottom">
-					<img class="insta-icon" src="{% static 'images/instagram_icon.png' %}">
+					<img class="email-insta-icon" src="{% static 'images/instagram_icon.png' %}">
 				</div>
 				<div class="col-9 border-bottom">
 					<a href="">
-					<img class="insta-text-icon" src="{% static 'images/instagram_text_icon.png' %}">
+					<img class="email-insta-text-icon" src="{% static 'images/instagram_text_icon.png' %}">
 					</a>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<div class="input-form">
+					<div class="email-input-form">
 						<form method="POST" class=" w-25">
 							{% csrf_token %}
 							{{ form.as_p }}

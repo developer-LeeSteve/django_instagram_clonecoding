@@ -1,0 +1,51 @@
+/*.navbar{
+	height: 54px;
+}*/
+
+.insta-text-icon{
+	width: 100%;
+/*	display:flex;
+	justify-content: right;*/
+}
+
+#index-icons{
+	display:flex;
+	justify-content:center;
+}
+#index-icons:nth-child(1){
+	width: 15%;
+	margin-left: px;
+	margin-top: 4px;
+}
+#index-icons:nth-child(2){
+	width: 15%;
+	margin-left: 13px;
+	margin-top: 4px;
+}
+#index-icons:nth-child(3){
+	width: 15%;
+	margin-left: 13px;
+	margin-top: 4px;
+}
+#index-icons:nth-child(4){
+	width: 15%;
+	margin-left: 13px;
+	margin-top: 4px;
+}
+#index-icons:nth-child(5){
+	width: 15%;
+	margin-left: 13px;
+	margin-top: 4px;
+}
+#profile-icon{
+	width: 15%;
+	margin-left: 13px;
+	margin-top: 4px;
+}
+nav{
+	background-color: #FFFFFF;
+}
+
+body{
+	background-color: #FAFAFA;
+}
