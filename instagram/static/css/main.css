@@ -3,49 +3,42 @@
 }*/
 
 .insta-text-icon{
-	width: 100%;
-/*	display:flex;
-	justify-content: right;*/
+	width: 90%;
+	display:flex;
+	justify-content: right;
 }
 
 #index-icons{
 	display:flex;
 	justify-content:center;
+	width: 30px;
+	margin-top: 11px;
+
 }
-#index-icons:nth-child(1){
-	width: 15%;
-	margin-left: px;
-	margin-top: 4px;
-}
-#index-icons:nth-child(2){
-	width: 15%;
-	margin-left: 13px;
-	margin-top: 4px;
-}
-#index-icons:nth-child(3){
-	width: 15%;
-	margin-left: 13px;
-	margin-top: 4px;
-}
-#index-icons:nth-child(4){
-	width: 15%;
-	margin-left: 13px;
-	margin-top: 4px;
-}
-#index-icons:nth-child(5){
-	width: 15%;
-	margin-left: 13px;
-	margin-top: 4px;
-}
+
 #profile-icon{
-	width: 15%;
-	margin-left: 13px;
-	margin-top: 4px;
+	width:30px;
+	margin-top: 2px;
+}
+
+.dropdown-menu{
+	width: 250px !important;
+}
+
+.dropdown-item{
+	height: 40px !important;
+}
+
+#dropdown-icons{
+	width:20px;
+	margin-right: 10px;
 }
 nav{
 	background-color: #FFFFFF;
+	display: flex;
 }
 
 body{
+
 	background-color: #FAFAFA;
 }
