@@ -69,19 +69,22 @@ def logoutUser(request):
 	logout(request)
 	return redirect('accounts:login')
 
-@custom_login_required
-def index(request):
-	return render(request, 'index.html')
-
 #
 def RegisterEmail(request):
 	return render(request, 'accounts/register_email.html')
 
+@custom_login_required
+def index(request):
+	return render(request, 'index.html')
+
+@custom_login_required
 def inbox(request):
 	return HttpResponse('inbox')
 
+@custom_login_required
 def explore(request):
 	return HttpResponse('explore')
 
+@custom_login_required
 def activity(request):
 	return HttpResponse('activity')
