@@ -13,14 +13,10 @@
 		{% include 'navbar.html' %}
 		<div class="container body-container border border-primary">
 			<div class="row">
-				<div class="card col-7 offset-1">
-				 	<div class="card-body">
-						<h5 class="card-title">Card title</h5>
-						<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						<a href="#" class="card-link">Card link</a>
-						<a href="#" class="card-link">Another link</a>
-					</div>
+				<div class="col-7 offset-1">
+					{% block content %}
+
+					{% endblock %}
 				</div>
 				<div class="col-3 sticky-top border border-primary nav-sidebar">
 					<div class="row">
@@ -35,9 +31,6 @@
 			</div>
 		</div>
 		
-		{% block content %}
-
-		{% endblock %}
 
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

@@ -1,6 +1,8 @@
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.utils.text import slugify
 
+import re, datetime, random
 import threading, random
 
 class EmailThread(threading.Thread):
@@ -26,3 +28,9 @@ def email_verification_code():
 	code = random.randrange(0, 1000000)
 	code_with_zero = f'{code:06}'
 	return code_with_zero
+
+def customSlugify(author, title):
+	random_int = ''.join([str(x) for x in random.sample(range(10), 3, counts=None)])
+	now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+	slug = str(author) + '-' + slugify(title, allow_unicode=True) + '-' + now + '-' + random_int
+	return slug

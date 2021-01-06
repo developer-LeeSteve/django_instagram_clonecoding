@@ -1,0 +1,66 @@
+{% load static %}
+
+<nav class="navbar fixed-top border border-bottom">
+	<div class="container">
+		<div class="row">
+			<div class="col-1"></div>
+			<div class="col-2">
+				<img class='insta-text-icon align-items-center' src="{% static 'images/instagram_text_icon.png' %}"></div>
+			<div class="col-1"></div>
+			<form class="col-4 input-group align-items-center">
+				<div class="input-group-prepend align-items-center">
+					<span class="input-group-text bg-transparent border-right-0" id='nav-input'>
+						<img src="{% static 'images/input_search_icon.png' %}">
+					</span>
+				</div>
+				<input class="form-control border-left-0" type="text" name="search" id="nav-input">
+			</form>
+			<div class="col-1"></div>
+			<div class="col-2">
+				<div class="row">
+					<div class="col-3">
+						<a href="#">
+							<img class="" src="{% static 'images/instagram_home_icon.png' %}" id="index-icons">
+						</a>
+					</div>
+					<div class="col-3">
+						<a href="#">
+							<img class="" src="{% static 'images/instagram_message_icon.png' %}" id="index-icons">
+						</a>
+					</div>
+					<div class="col-3">
+						<a href="#">
+							<img class="" src="{% static 'images/instagram_compass_icon.png' %}" id="index-icons">
+						</a>
+					</div>
+					<div class="col-3">
+						<a href="#">
+							<img class="" src="{% static 'images/instagram_heart_icon.png' %}" id="index-icons">
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="">
+				<div class="nav-item dropdown">
+					<a class="nav-link" href="#" id="profile-icon-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<img class="border border-primary rounded-circle" src="{% static 'images/instagram_profile_icon.png' %}" id="profile-icon">
+					</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile-icon-dropdown">
+						<a href="{% url 'base_profile' user.username %}" class="dropdown-item align-items-center">
+							<img id="dropdown-icons" src="{% static 'images/dropdown_profile_icon.png' %}"> Profile
+						</a>
+						<a href="#" class="dropdown-item align-items-center">
+							<img id="dropdown-icons" src="{% static 'images/dropdown_bookmark_icon.png' %}"> Saved
+						</a>
+						<a href="#" class="dropdown-item align-items-center">
+							<img id="dropdown-icons" src="{% static 'images/dropdown_settings_icon.png' %}"> Settings
+						</a>
+						<a href="#" class="dropdown-item align-items-center">
+							<img id="dropdown-icons" src="{% static 'images/dropdown_accountchange_icon.png' %}"> Account Change
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+</nav>
