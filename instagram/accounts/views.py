@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, FormView
 from django.core.mail import EmailMessage
@@ -83,3 +83,15 @@ def explore(request):
 @custom_login_required
 def activity(request):
 	return HttpResponse('activity')
+
+@custom_login_required
+def index(request):
+	return render(request, 'index.html')
+
+@custom_login_required
+def profile(request, username):
+	objects = [user.username for user in User.objects.all()]
+	if username not in objects:
+		return redirect("accounts:index")
+	context = {'username': username}
+	return render(request, 'profile.html', context)

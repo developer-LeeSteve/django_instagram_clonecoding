@@ -12,6 +12,10 @@ def custom_login_required(view_func):
 		return view_func(request, *args, **kwargs)
 	return wrap_func
 
+# def already_logged_in(view_func):
+# 	if request.user.is_authenticated:
+# 		return redirect('')
+
 # def not_blocked_requried(view_func):
 # 	def wrap_func(request, *args, **kwargs):
 # 		if not request.user 

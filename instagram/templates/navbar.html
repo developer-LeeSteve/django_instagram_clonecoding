@@ -5,7 +5,8 @@
 		<div class="row">
 			<div class="col-1"></div>
 			<div class="col-2">
-				<img class='insta-text-icon align-items-center' src="{% static 'images/instagram_text_icon.png' %}"></div>
+				<a href="{% url 'accounts:index' %}"><img class='insta-text-icon align-items-center' src="{% static 'images/instagram_text_icon.png' %}"></a>
+			</div>
 			<div class="col-1"></div>
 			<form class="col-4 input-group align-items-center">
 				<div class="input-group-prepend align-items-center">
@@ -46,7 +47,7 @@
 						<img class="border border-primary rounded-circle" src="{% static 'images/instagram_profile_icon.png' %}" id="profile-icon">
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile-icon-dropdown">
-						<a href="{% url 'base_profile' user.username %}" class="dropdown-item align-items-center">
+						<a href="{% url 'accounts:profile' user.username %}" class="dropdown-item align-items-center">
 							<img id="dropdown-icons" src="{% static 'images/dropdown_profile_icon.png' %}"> Profile
 						</a>
 						<a href="#" class="dropdown-item align-items-center">
