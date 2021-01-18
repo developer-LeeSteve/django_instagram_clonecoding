@@ -1,6 +1,8 @@
-/*.navbar{
-	height: 54px;
-}*/
+@font-face{
+	font-family: '';
+	src: local('ProximaNova-Regular'),
+		url('/static/fonts/ProximaNova-Regular.otf') format("opentype");
+}
 
 .insta-text-icon{
 	width: 90%;
@@ -26,7 +28,8 @@
 }
 
 .nav-sidebar{
-	margin-left: 50px;
+	margin-left: 40%;
+	width: 25%;
 }
 
 #dropdown-icons{
@@ -61,5 +64,6 @@ nav{
 body{
 
 	background-color: #FAFAFA;
+	font-family: 'ProximaNova-Regular';
 }
 

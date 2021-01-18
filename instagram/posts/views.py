@@ -6,7 +6,6 @@ from posts.forms import CreatePostForm
 from posts.models import Post
 
 @custom_login_required
-
 def post_create(request):
 	if request.method == "POST":
 		form = CreatePostForm(request.POST, request.FILES)
