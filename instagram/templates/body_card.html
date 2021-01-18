@@ -1,0 +1,17 @@
+{% load static %}
+
+{% for i in posts %}
+	<div class="card col-7 offset-1">
+		<img class="card-img-top" src="{{ i.thumb.url }}">
+	 	<div class="card-body">
+			<h5 class="card-title">{{i.title}}</h5>
+			
+			<p class="card-text">{{i.body}}</p>
+		</div>
+	</div>
+<!-- 	<tr>
+		<td>{{i.title}}</td>
+		<td>{{i.body}}</td>
+		<td>{{i.nickname}}</td>
+	</tr> -->
+{% endfor %}

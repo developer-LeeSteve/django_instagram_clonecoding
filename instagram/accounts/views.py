@@ -11,6 +11,8 @@ from accounts.models import *
 from accounts.custom_methods import email_verification_code, send_mail
 from accounts.decorators import custom_login_required
 
+from posts.models import Post
+
 
 # 회원가입 View
 class UserRegisterView(CreateView):
@@ -86,7 +88,9 @@ def activity(request):
 
 @custom_login_required
 def index(request):
-	return render(request, 'index.html')
+	posts = Post.objects.all()
+	context = {'posts': posts}
+	return render(request, 'index.html', context)
 
 @custom_login_required
 def profile(request, username):

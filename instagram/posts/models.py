@@ -9,7 +9,8 @@ class Post(models.Model):
 	slug = models.SlugField(allow_unicode=True)
 	body = models.TextField()
 	date = models.DateTimeField(auto_now_add=True)
-	thumb = models.ImageField(default='default.png', blank=True)
+	thumb = models.ImageField(default='default_profile.png', blank=True)
+	nickname = models.CharField(max_length=100, null=True)
 	author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
 
 	def snippet(self):
